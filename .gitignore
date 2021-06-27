@@ -1,4 +1,4 @@
 venv/
 store/__pyche__
 store/migrations/__pyche__
-
+.gitignore
