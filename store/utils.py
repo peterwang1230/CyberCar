@@ -1,5 +1,5 @@
 import json
-from .models import *
+from .models import Customer, Product, Order, OrderItem
 
 def cookieCart(request):
 
@@ -16,8 +16,8 @@ def cookieCart(request):
 
 	for i in cart:
 		#We use try block to prevent items in cart that may have been removed from causing error
-		try:	
-			if(cart[i]['quantity']>0): #items with negative quantity = lot of freebies  
+		try:
+			if(cart[i]['quantity']>0): #items with negative quantity = lot of freebies
 				cartItems += cart[i]['quantity']
 
 				product = Product.objects.get(id=i)
@@ -27,10 +27,10 @@ def cookieCart(request):
 				order['get_cart_items'] += cart[i]['quantity']
 
 				item = {
-				'id':product.id,
-				'product':{'id':product.id,'name':product.name, 'price':product.price, 
-				'imageURL':product.imageURL}, 'quantity':cart[i]['quantity'],
-				'digital':product.digital,'get_total':total,
+					'id':product.id,
+					'product':{'id':product.id,'name':product.name, 'price':product.price, 
+					'imageURL':product.imageURL}, 'quantity':cart[i]['quantity'],
+					'digital':product.digital,'get_total':total,
 				}
 				items.append(item)
 
@@ -38,7 +38,7 @@ def cookieCart(request):
 					order['shipping'] = True
 		except:
 			pass
-			
+
 	return {'cartItems':cartItems ,'order':order, 'items':items}
 
 def cartData(request):
@@ -55,7 +55,7 @@ def cartData(request):
 
 	return {'cartItems':cartItems ,'order':order, 'items':items}
 
-	
+
 def guestOrder(request, data):
 	name = data['form']['name']
 	email = data['form']['email']
@@ -63,9 +63,7 @@ def guestOrder(request, data):
 	cookieData = cookieCart(request)
 	items = cookieData['items']
 
-	customer, created = Customer.objects.get_or_create(
-			email=email,
-			)
+	customer, created = Customer.objects.get_or_create(email=email)
 	customer.name = name
 	customer.save()
 
@@ -79,7 +77,7 @@ def guestOrder(request, data):
 		orderItem = OrderItem.objects.create(
 			product=product,
 			order=order,
-			quantity=(item['quantity'] if item['quantity']>0 else -1*item['quantity']), # negative quantity = freebies
+			quantity = (item['quantity'] if item['quantity']>0 else -1 * item['quantity'])
 		)
-	return customer, order
 
+	return customer, order
