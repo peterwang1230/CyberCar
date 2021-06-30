@@ -71,7 +71,13 @@ def processOrder(request):
 		customer, order = guestOrder(request, data)
 
 	total = float(data['form']['total'])
+	track = data['form']['track']
+	position = data['form']['position']
+
+	
 	order.transaction_id = transaction_id
+	order.track = track
+	order.position = position
 
 	if total == order.get_cart_total:
 		order.complete = True
