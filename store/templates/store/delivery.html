@@ -1,0 +1,40 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+	<div class="col-lg-12">
+        <div class="box-element">
+            <div class="jumbotron text-center">
+                <h3>物聯網餐車 （CyberTrain）鋼軌傳輸系統</h3>
+            </div>
+        </div>
+		<div class="box-element">
+            <div class="cart-row">
+                <div style="flex:1"><strong>Order</strong></div>
+                <div style="flex:3"><strong>Content</strong></div>
+                <div style="flex:1"><strong>Action</strong></div>
+            </div>
+            {% for order in orders %}
+            <div class="cart-row">
+                <div style="flex:1"><p>{{order.id}}</p></div>
+                <div style="flex:3"><p>{{order.get_content}}</p></div>
+                <div style="flex:1"><button data-order="{{order.id}}" data-action="add" class="btn btn-primary delivery-cart">Delivery</button></div>
+            </div>
+            {% endfor %}
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    var deliveryBtns = document.getElementsByClassName('delivery-cart')
+
+    for (i = 0; i < deliveryBtns.length; i++) {
+        deliveryBtns[i].addEventListener('click', function(){
+            var orderId = this.dataset.order
+            var action = this.dataset.action
+            console.log('orderId:', orderId, 'Action:', action)
+
+        })
+    }
+</script>
+{% endblock content %}

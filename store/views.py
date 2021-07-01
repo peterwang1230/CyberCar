@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 import datetime
 from .models import *
+# from django.db import connection
+# from django.db import Q
 from .utils import cookieCart, cartData, guestOrder
 
 # Create your views here.
@@ -14,6 +16,14 @@ def store(request):
 	products = Product.objects.all()
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
+
+def delivery(request):
+	# orders = Order.objects.all()
+	orders = Order.objects.filter(complete=True) & Order.objects.filter(deliveried=False)
+	# orders = Order.objects.filter(Q(complete=True) & Q(deliveried=False))
+
+	context = {'orders':orders}
+	return render(request, 'store/delivery.html', context)
 
 def cart(request):
 	data = cartData(request)
