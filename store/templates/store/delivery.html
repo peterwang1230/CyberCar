@@ -18,7 +18,7 @@
             <div class="cart-row">
                 <div style="flex:1"><p>{{order.id}}</p></div>
                 <div style="flex:3"><p>{{order.get_content}}</p></div>
-                <div style="flex:1"><button data-order="{{order.id}}" data-action="add" class="btn btn-primary delivery-cart">Delivery</button></div>
+                <div style="flex:1"><button data-orderid="{{order.id}}" class="btn btn-primary delivery-cart">Delivery</button></div>
             </div>
             {% endfor %}
 		</div>
@@ -30,11 +30,30 @@
 
     for (i = 0; i < deliveryBtns.length; i++) {
         deliveryBtns[i].addEventListener('click', function(){
-            var orderId = this.dataset.order
-            var action = this.dataset.action
-            console.log('orderId:', orderId, 'Action:', action)
+            var orderID = this.dataset.orderid
+            var orderTrack = this.dataset.ordertrack
+            var orderPosition = this.dataset.orderposition
+            console.log('orderId:', orderID)
+
+            var url = '/delivery_cart/'
+            fetch(url, {
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json',
+                    'X-CSRFToken':csrftoken,
+                }, 
+                body:JSON.stringify({'orderID':orderID})
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                alert('Delivery completed');  
+                location.reload()
+            });
 
         })
     }
+
 </script>
 {% endblock content %}
