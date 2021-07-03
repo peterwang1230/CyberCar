@@ -133,19 +133,19 @@ def deliveryCart(request):
 	client = mqtt.Client(client_id='publish-cyberTrain')
 	client.on_connect = connect_msg()
 	client.on_publish = publish_msg()
-
-	# send to mqtt
-	client.on_connect = connect_msg()
-	client.on_publish = publish_msg()
-	#client.connect('127.0.0.1', 1883)
 	client.username_pw_set(username='pub_client', password='password')
 	client.connect('127.0.0.1', 1883, 60)
 	# client.connect('192.168.50.172', 1883)
+	
+	# publish to mqtt
 	ret = client.publish('train/v1/go', payload)
 
 	client.loop()
-	order.deliveried = True
-	order.save()
+	if ret[0] == 0:
+		order.deliveried = True
+		order.save()
+	else:
+		print(f"Failed to send message, return code:", ret[0])
 
 	client.disconnect()
 	return JsonResponse('Delivery Complete', safe=False)
