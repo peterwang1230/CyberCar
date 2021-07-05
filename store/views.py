@@ -1,4 +1,5 @@
 import json
+import paho.mqtt.client as mqtt
 from django.shortcuts import render
 from django.http import JsonResponse
 import datetime
@@ -104,3 +105,47 @@ def processOrder(request):
 		)
 
 	return JsonResponse('Payment complete', safe=False)
+
+def deliveryCart(request):
+	data = json.loads(request.body)
+
+	orderID = data['orderID']
+	order = Order.objects.get(id=orderID)
+	orderTrack = order.track
+	orderPosition = order.position
+
+	print('Track:', orderTrack)
+	print('Position:', orderPosition)
+	train_cmd = {
+		"Track": orderTrack,
+		"Position":orderPosition
+	}
+	payload = json.dumps(train_cmd) # encode dict oject to JSON
+
+	def connect_msg():
+		print('Connect to Broker')
+
+
+	def publish_msg():
+		print('Message Published')
+
+
+	client = mqtt.Client(client_id='publish-cyberTrain')
+	client.on_connect = connect_msg()
+	client.on_publish = publish_msg()
+	client.username_pw_set(username='pub_client', password='password')
+	client.connect('127.0.0.1', 1883, 60)
+	# client.connect('192.168.50.172', 1883)
+	
+	# publish to mqtt
+	ret = client.publish('train/v1/go', payload)
+
+	client.loop()
+	if ret[0] == 0:
+		order.deliveried = True
+		order.save()
+	else:
+		print(f"Failed to send message, return code:", ret[0])
+
+	client.disconnect()
+	return JsonResponse('Delivery Complete', safe=False)
