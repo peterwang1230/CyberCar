@@ -74,7 +74,6 @@ def updateItem(request):
 def processOrder(request):
 	transaction_id = datetime.datetime.now().timestamp()
 	data = json.loads(request.body)
-
 	if request.user.is_authenticated:
 		customer = request.user.customer
 		order, created = Order.objects.get_or_create(customer=customer, complete=False)
@@ -85,7 +84,6 @@ def processOrder(request):
 	track = data['form']['track']
 	position = data['form']['position']
 
-	
 	order.transaction_id = transaction_id
 	order.track = track
 	order.position = position
