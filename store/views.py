@@ -7,8 +7,14 @@ from .models import *
 # from django.db import connection
 # from django.db import Q
 from .utils import cookieCart, cartData, guestOrder
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+def login(request):
+    #return render(request, 'users/login.html')
+	pass
+
+@login_required
 def store(request):
 	data = cartData(request)
 	cartItems = data['cartItems']
@@ -18,6 +24,7 @@ def store(request):
 	context = {'products':products, 'cartItems':cartItems}
 	return render(request, 'store/store.html', context)
 
+@login_required
 def delivery(request):
 	# orders = Order.objects.all()
 	orders = Order.objects.filter(complete=True) & Order.objects.filter(deliveried=False)
