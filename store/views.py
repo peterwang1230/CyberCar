@@ -26,12 +26,16 @@ def store(request):
 
 @login_required
 def delivery(request):
+	# mqttSub()
 	# orders = Order.objects.all()
 	orders = Order.objects.filter(complete=True) & Order.objects.filter(deliveried=False)
 	# orders = Order.objects.filter(Q(complete=True) & Q(deliveried=False))
 
 	context = {'orders':orders}
 	return render(request, 'store/delivery.html', context)
+
+def mqttSub():
+	pass
 
 def cart(request):
 	data = cartData(request)
