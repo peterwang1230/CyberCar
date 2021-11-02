@@ -2,6 +2,14 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm
+#
+from store import views as store_views
+#
+import json
+import paho.mqtt.client as mqtt
+from django.shortcuts import render
+from django.http import JsonResponse
+import datetime
 
 
 def register(request):
@@ -20,3 +28,40 @@ def register(request):
 # @login_required
 # def profile(request):
 #    return render(request, 'profile.html')
+
+
+
+def backCar(request):
+
+    train_cmd = {
+		"Track": 'A1',
+		"Position": '1'
+	}
+    payload = json.dumps(train_cmd) # encode dict oject to JSON
+
+    def connect_msg():
+        print('Connect to Broker')
+
+
+    def publish_msg():
+        print('Message Published')
+
+    client = mqtt.Client(client_id='publish-cyberTrain') # publisher cherpa
+    client.on_connect = connect_msg()
+    client.on_publish = publish_msg()
+    client.username_pw_set(username='pub_client', password='password')
+    client.connect('127.0.0.1', 1883, 60)
+	# client.connect('192.168.50.172', 1883)
+	
+	# publish to mqtt
+    ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
+	# (subscribe: tram/v1/cherpa/A1/listen)
+    client.loop()
+    if ret[0] == 0:
+        pass
+    else:
+        print(f"Failed to send message, return code:", ret[0])
+    client.disconnect()
+
+    messages.success(request, f'CyberTrain 已安全返航，敬祝用餐愉快！')
+    return redirect('store')

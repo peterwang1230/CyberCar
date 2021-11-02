@@ -139,7 +139,7 @@ def deliveryCart(request):
 		print('Message Published')
 
 
-	client = mqtt.Client(client_id='publish-cyberTrain')
+	client = mqtt.Client(client_id='publish-cyberTrain') # publisher cherpa
 	client.on_connect = connect_msg()
 	client.on_publish = publish_msg()
 	client.username_pw_set(username='pub_client', password='password')
@@ -147,7 +147,8 @@ def deliveryCart(request):
 	# client.connect('192.168.50.172', 1883)
 	
 	# publish to mqtt
-	ret = client.publish('train/v1/go', payload)
+	ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
+	# (subscribe: tram/v1/cherpa/A1/listen)
 
 	client.loop()
 	if ret[0] == 0:
