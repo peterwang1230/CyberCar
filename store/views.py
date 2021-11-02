@@ -125,9 +125,15 @@ def deliveryCart(request):
 
 	print('Track:', orderTrack)
 	print('Position:', orderPosition)
+	"""
 	train_cmd = {
 		"Track": orderTrack,
 		"Position":orderPosition
+	}
+	"""
+
+	train_cmd = {
+		"traffic": {"travel": orderPosition} # '01' ~ '05'
 	}
 	payload = json.dumps(train_cmd) # encode dict oject to JSON
 
@@ -139,7 +145,7 @@ def deliveryCart(request):
 		print('Message Published')
 
 
-	client = mqtt.Client(client_id='publish-cyberTrain') # publisher cherpa
+	client = mqtt.Client(client_id='publish-cherpa') # publisher cherpa
 	client.on_connect = connect_msg()
 	client.on_publish = publish_msg()
 	client.username_pw_set(username='pub_client', password='password')
@@ -147,7 +153,10 @@ def deliveryCart(request):
 	# client.connect('192.168.50.172', 1883)
 	
 	# publish to mqtt
-	ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
+	# 電車 A1 出發前往1桌
+	ret = client.publish('tram/v1/cherpa/A1/tell', payload) # payload = {"traffic":{"travel":"01"}} 
+
+	# ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
 	# (subscribe: tram/v1/cherpa/A1/listen)
 
 	client.loop()

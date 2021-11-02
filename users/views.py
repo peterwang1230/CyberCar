@@ -33,10 +33,17 @@ def register(request):
 
 def backCar(request):
 
+    """
     train_cmd = {
-		"Track": 'A1',
-		"Position": '1'
+        "Track": 'A1',
+        "Position": '00'
+    }
+    """
+    # 電車返回廚房 payload
+    train_cmd = {
+		"traffic": {"travel": "00"}
 	}
+
     payload = json.dumps(train_cmd) # encode dict oject to JSON
 
     def connect_msg():
@@ -46,7 +53,7 @@ def backCar(request):
     def publish_msg():
         print('Message Published')
 
-    client = mqtt.Client(client_id='publish-cyberTrain') # publisher cherpa
+    client = mqtt.Client(client_id='publish-ipadxx') # publisher ipadxx
     client.on_connect = connect_msg()
     client.on_publish = publish_msg()
     client.username_pw_set(username='pub_client', password='password')
@@ -54,8 +61,9 @@ def backCar(request):
 	# client.connect('192.168.50.172', 1883)
 	
 	# publish to mqtt
-    ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
-	# (subscribe: tram/v1/cherpa/A1/listen)
+    # 電車 A1 返回廚房
+    ret = client.publish('tram/v1/cherpa/A1/tell', payload) # payload = {"traffic":{"travel":"00"}} 
+
     client.loop()
     if ret[0] == 0:
         pass
