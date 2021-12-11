@@ -10,15 +10,19 @@
         </div>
 		<div class="box-element">
             <div class="cart-row">
-                <div style="flex:1"><strong>Order</strong></div>
-                <div style="flex:3"><strong>Content</strong></div>
-                <div style="flex:1"><strong>Action</strong></div>
+                <div style="flex:1"><strong>訂 單</strong></div>
+                <div style="flex:3"><strong>餐 點 明 細</strong></div>
+                <div style="flex:1"><strong>餐 車</strong></div>
+                <div style="flex:1"><strong>桌 次</strong></div>
+                <div style="flex:1"><strong>行 動</strong></div>
             </div>
             {% for order in orders %}
             <div class="cart-row">
                 <div style="flex:1"><p>{{order.id}}</p></div>
                 <div style="flex:3"><p>{{order.get_content}}</p></div>
-                <div style="flex:1"><button data-orderid="{{order.id}}" class="btn btn-primary delivery-cart">Delivery</button></div>
+                <div style="flex:1"><p>{{order.track}}</p></div>
+                <div style="flex:1"><p>{{order.position}}</p></div>
+                <div style="flex:1"><button data-orderid="{{order.id}}" class="btn btn-primary delivery-cart">送 餐</button></div>
             </div>
             {% endfor %}
 		</div>

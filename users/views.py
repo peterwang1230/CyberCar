@@ -32,6 +32,9 @@ def register(request):
 
 
 def backCar(request):
+    user = request.user
+    user_name = user.username
+    print(user_name)
 
     """
     train_cmd = {
@@ -56,13 +59,21 @@ def backCar(request):
     client = mqtt.Client(client_id='publish-ipadxx') # publisher ipadxx
     client.on_connect = connect_msg()
     client.on_publish = publish_msg()
-    client.username_pw_set(username='pub_client', password='password')
-    client.connect('127.0.0.1', 1883, 60)
-	# client.connect('192.168.50.172', 1883)
+    # client.username_pw_set(username='pub_client', password='password')
+    client.connect('127.0.0.1', 1883, 60)  # Local IP
+	# client.connect('192.168.50.172', 1883) # Home IP
+    # client.connect('192.168.168.57', 1883)  # 我的手機 ip
+    # client.connect('192.168.0.200', 1883) # 競賽 IP
 	
 	# publish to mqtt
-    # 電車 A1 返回廚房
-    ret = client.publish('tram/v1/cherpa/A1/tell', payload) # payload = {"traffic":{"travel":"00"}} 
+    if user_name == '192.168.0.1':
+        # 電車 A1 返回廚房
+        print('電車 A1 返回廚房')
+        ret = client.publish('tram/v1/cherpa/A1/tell', payload) # payload = {"traffic":{"travel":"00"}} 
+    else:
+        # 電車 A2 返回廚房  
+        print('電車 A2 返回廚房')
+        ret = client.publish('tram/v1/cherpa/A2/tell', payload) # payload = {"traffic":{"travel":"00"}}
 
     client.loop()
     if ret[0] == 0:

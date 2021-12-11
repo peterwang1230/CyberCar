@@ -151,10 +151,17 @@ def deliveryCart(request):
 	client.username_pw_set(username='pub_client', password='password')
 	client.connect('127.0.0.1', 1883, 60)
 	# client.connect('192.168.50.172', 1883)
+	# client.connect('192.168.168.57', 1883)  # 我的手機 ip
+	# client.connect('192.168.0.200', 1883) # 競賽 IP
 	
 	# publish to mqtt
-	# 電車 A1 出發前往1桌
-	ret = client.publish('tram/v1/cherpa/A1/tell', payload) # payload = {"traffic":{"travel":"01"}} 
+	if orderTrack == 'A1':
+		# 電車 A1 出發前往餐桌
+		print('電車 A1 出發前往餐桌： ', orderPosition )
+		ret = client.publish('tram/v1/cherpa/A1/tell', payload)
+	else:
+		print('電車 A2 出發前往餐桌： ', orderPosition )
+		ret = client.publish('tram/v1/cherpa/A2/tell', payload)
 
 	# ret = client.publish('train/v1/go', payload) # tram/v1/cherpa/A1/tell 
 	# (subscribe: tram/v1/cherpa/A1/listen)

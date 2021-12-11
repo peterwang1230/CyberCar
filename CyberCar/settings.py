@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&7_nx6r-y**3!@(^r!i6z#q*&@ev^p%k-@w4g-y%)zw$c*_lpf
 DEBUG = True
 
 # ALLOWED_HOSTS = []
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.11.255.190']   # start-up Terrace Wi-fi IP
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.11.232.104']   # start-up Terrace Wi-fi IP
 
 
 # Application definition
